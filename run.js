@@ -131,10 +131,24 @@ function 去下个图(图的名字, 下个图的下标) {
     }
 }
 function 获取当前所在地图(图) {
+
+    var a = document.getElementsByClassName('main')[0].innerText;
+    var 图的下标 = false;
+    var 图的名称 = false;
+    var 下个图的下标 = false;
+    var 下个图的名称 = false;
+    for (var j = 0; j < 图.length; j++) {
+        var 文案1 = "你站在" + "「" + 图[j] + "」"
+        var 文案2 = "你来到" + "「" + 图[j] + "」"
+        if (a.indexOf(文案1) != -1 || a.indexOf(文案2) != -1) {
+            图的下标 = j;
+            图的名称 = 图[j]
+        }
+    }
     //查看缓存是否有当前的下标，如果有直接返回
     var 这个图的下标 = localStorage.getItem("这个图的下标");
     console.log(这个图的下标)
-    if (这个图的下标 != null) {
+    if (这个图的下标 != null && 图[这个图的下标] == 图的名称 ) {
         这个图的下标 = parseInt(这个图的下标)
         if (图.length == 这个图的下标 + 1) {
             下个图的下标 = 0
@@ -151,20 +165,6 @@ function 获取当前所在地图(图) {
         return 返回;
     }
 
-
-    var a = document.getElementsByClassName('main')[0].innerText;
-    var 图的下标 = false;
-    var 图的名称 = false;
-    var 下个图的下标 = false;
-    var 下个图的名称 = false;
-    for (var j = 0; j < 图.length; j++) {
-        var 文案1 = "你站在" + "「" + 图[j] + "」"
-        var 文案2 = "你来到" + "「" + 图[j] + "」"
-        if (a.indexOf(文案1) != -1 || a.indexOf(文案2) != -1) {
-            图的下标 = j;
-            图的名称 = 图[j]
-        }
-    }
     if (图.length == 图的下标 + 1) {
         下个图的下标 = 0
     } else {
