@@ -11,10 +11,29 @@
 
 //默认选择，缓存可修改
 var 选择的路线 = 1
-
-
-var 延时 = 500
-
+var 路线 = [
+    [
+        "艾瑞达神殿5",
+        "艾瑞达神殿4",
+        "中央大道5",
+        "中央大道4",
+        "中央大道3",
+        "中央大道2",
+        "中央大道1",
+        "中央大道2",
+        "中央大道3",
+        "中央大道4",
+        "中央大道5",
+        "艾瑞达神殿1",
+        "艾瑞达神殿2",
+        "艾瑞达神殿3",
+        "艾瑞达神殿2",
+        "艾瑞达神殿1",
+        "中央大道5",
+        "艾瑞达神殿4"
+    ],
+    ["河安丘陵二", "河安丘陵三", "河安丘陵四", "河安丘陵一", "河安道三", "河安丘陵一"]
+]
 var 游戏名称 = "拉克丝"
 
 var 材料名称 = [
@@ -28,19 +47,18 @@ var 材料名称 = [
     "返回场景"
 ];
 
+var 延时 = 500
+
+
 
 var 缓存的选择的路线 = localStorage.getItem('选择的路线');
-if (缓存的选择的路线 == null ) {
+if (缓存的选择的路线 == null) {
     localStorage.setItem('选择的路线', 选择的路线)
-}else{
+} else {
     选择的路线 = 缓存的选择的路线;
 }
 
 
-var 路线 = [
-    ["艾瑞殿5", "艾瑞殿4", "中央道5", "中央道4", "中央道3", "中央道4", "中央道5", "中央道4", "艾瑞殿1", "艾瑞殿2"],
-    ["河安丘陵二", "河安丘陵三", "河安丘陵四", "河安丘陵一", "河安道三", "河安丘陵一"]
-]
 
 //引入jq
 var script = document.createElement("script");
@@ -58,9 +76,10 @@ function 跑图() {
     var 图 = 路线[选择的路线];
     //图的下标 图的名称 下个图的下标 下个图的名称
     var 图的信息 = 获取当前所在地图(图)
+
     var 是否捡了材料 = 捡材料()
     if (是否捡了材料 == false) {
-        去下个图(图的信息.下个图的名称)
+        去下个图(图的信息.下个图的名称, 图的信息.下个图的下标)
     }
 
 }
@@ -72,13 +91,11 @@ function 查询是否点过更多() {
         return false;
     }
 }
-function 清除点击了更多的记录(){
+function 清除点击了更多的记录() {
     localStorage.setItem('更多是否点了', 0);
-    console.log(localStorage.getItem('更多是否点了'))
 }
-function 记录点击了更多的记录(){
+function 记录点击了更多的记录() {
     localStorage.setItem('更多是否点了', 1);
-    console.log(localStorage.getItem('更多是否点了'))
 }
 
 
@@ -103,16 +120,38 @@ function 捡材料() {
     }
     return false
 }
-function 去下个图(图的名字) {
+function 去下个图(图的名字, 下个图的下标) {
     for (var i = 0; i < 50; i++) {
         let 链接文字 = $('a').eq(i).text();
         if (链接文字.indexOf(图的名字) != -1) {
             清除点击了更多的记录()
+            localStorage.setItem("这个图的下标", 下个图的下标);
             window.location.href = $('a').eq(i).attr('href');
         }
     }
 }
 function 获取当前所在地图(图) {
+    //查看缓存是否有当前的下标，如果有直接返回
+    var 这个图的下标 = localStorage.getItem("这个图的下标");
+    console.log(这个图的下标)
+    if (这个图的下标 != null) {
+        这个图的下标 = parseInt(这个图的下标)
+        if (图.length == 这个图的下标 + 1) {
+            下个图的下标 = 0
+        } else {
+            下个图的下标 = 这个图的下标 + 1
+        }
+        var 返回 = {
+            图的下标: 这个图的下标,
+            图的名称: 图[这个图的下标],
+            下个图的下标: 下个图的下标,
+            下个图的名称: 图[下个图的下标],
+        }
+        console.log(返回)
+        return 返回;
+    }
+
+
     var a = document.getElementsByClassName('main')[0].innerText;
     var 图的下标 = false;
     var 图的名称 = false;
@@ -147,7 +186,7 @@ function 验证码页面发送通知() {
             return true
         }
         if (链接文字.indexOf("xy") != -1) {
-            var fhhhurl = "http://www.lf1874.com/fh.php?name="+游戏名称+"&sendmsg=true"
+            var fhhhurl = "http://www.lf1874.com/fh.php?name=" + 游戏名称 + "&sendmsg=true"
             window.open(fhhhurl)
         }
     }
