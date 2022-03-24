@@ -13,6 +13,8 @@ var 选择的路线 = 1
 
 var 延时 = 500
 
+var 游戏名称 = "拉克丝"
+
 var 材料名称 = [
     // "完全生命",
     "高级",
@@ -127,13 +129,24 @@ function 获取当前所在地图(图) {
     }
     return 返回;
 }
+function 验证码页面发送通知() {
+    for (var i = 0; i < 10; i++) {
+        let 链接文字 = $('input').eq(i).attr('id');
+        if (!链接文字) {
+            return true
+        }
+        if (链接文字.indexOf("xy") != -1) {
+            var fhhhurl = "http://www.lf1874.com/fh.php?name="+游戏名称+"&sendmsg=true"
+            window.open(fhhhurl)
+        }
+    }
+}
 
 
 (function () {
-    var a = document.getElementsByClassName('main')[0].innerText;
-    console.log(a)
     //开始执行
     setTimeout(function () {
+        验证码页面发送通知()
         跑图()
     }, 延时)
 
